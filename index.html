@@ -65,7 +65,7 @@
   .num-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bg);}
   .num-row:last-child{border-bottom:none;}
   .num-label{font-size:14px;flex:1;}
-  .num-unit{font-size:12px;color:var(--text-hint);margin-right:8px;}
+  .num-unit{font-size:12px;color:var(--text-hint);margin-right:8px;min-width:28px;display:inline-block;}
   .num-control{display:flex;align-items:center;gap:8px;}
   .num-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:white;font-size:18px;color:var(--text-sub);display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:all 0.15s;line-height:1;}
   .num-btn:active{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
@@ -76,31 +76,21 @@
   .promise-input::placeholder{color:var(--text-hint);}
 
   /* 4점 척도 */
-  .scale-outer{margin-top:16px;padding:0 4px;}
+  .scale-outer{margin-top:16px;padding:0 4px;position:relative;}
 
-  /* 이모티콘 행 — 4등분 그리드 */
-  .scale-emoji-row{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:6px;}
+  /* 이모티콘 행 */
+  .scale-emoji-row{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:0;}
   .scale-emoji{font-size:26px;text-align:center;cursor:pointer;transition:transform 0.2s,opacity 0.2s;opacity:0.3;user-select:none;-webkit-user-select:none;padding:4px 0;}
   .scale-emoji.active{transform:scale(1.4);opacity:1;}
 
-  .scale-slider-wrap{padding:0 11%;}
-  input[type=range].scale-slider{
-    width:100%;height:28px;display:block;margin:0;
-    -webkit-appearance:none;appearance:none;outline:none;cursor:pointer;
-    background:transparent;border-radius:4px;
-  }
-  input[type=range].scale-slider::-webkit-slider-thumb{
-    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
-    background:white;border:2.5px solid var(--green);
-    box-shadow:0 2px 8px rgba(76,175,130,0.3);cursor:pointer;
-    position:relative;z-index:2;
-  }
-  input[type=range].scale-slider::-moz-range-thumb{
-    width:26px;height:26px;border-radius:50%;border:2.5px solid var(--green);
-    background:white;cursor:pointer;
-  }
-  .scale-track-wrap{position:relative;height:6px;margin:0 4%;border-radius:4px;background:#D6EDE1;margin-top:-17px;z-index:1;}
-  .scale-track-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;transition:width 0.25s,background 0.25s;}
+  /* 터치 오버레이 — 슬라이더 input은 숨기고 이 영역에서 터치 받음 */
+  .scale-touch-area{position:relative;height:48px;margin:4px 0;cursor:pointer;touch-action:none;}
+  .scale-track-wrap{position:absolute;top:50%;left:0;right:0;height:6px;transform:translateY(-50%);border-radius:4px;background:#D6EDE1;}
+  .scale-track-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;transition:width 0.2s,background 0.2s;}
+  .scale-thumb{position:absolute;top:50%;width:28px;height:28px;border-radius:50%;background:white;border:2.5px solid var(--green);box-shadow:0 2px 8px rgba(76,175,130,0.3);transform:translate(-50%,-50%);transition:left 0.2s;pointer-events:none;}
+
+  /* 숨겨진 range input */
+  input[type=range].scale-slider{display:none;}
 
   /* 텍스트 행 */
   .scale-text-row{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8px;}
@@ -117,11 +107,11 @@
 
   /* 금색 메탈릭 그라데이션 트랙 이펙트 */
   @keyframes metallic-gold{
-    0%  {background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#C8960C,#7A5500);background-size:300% 100%;background-position:0% 50%;}
-    25% {background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#C8960C,#7A5500);background-size:300% 100%;background-position:100% 50%;}
-    50% {background:linear-gradient(90deg,#F5D060,#C8960C,#7A5500,#C8960C,#F5D060);background-size:300% 100%;background-position:0% 50%;}
-    75% {background:linear-gradient(90deg,#C8960C,#F5D060,#C8960C,#7A5500,#C8960C);background-size:300% 100%;background-position:100% 50%;}
-    100%{background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#FFE680,#C8960C);background-size:300% 100%;background-position:50% 50%;}
+    0%  {background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#C8960C,#7A5500);}
+    25% {background:linear-gradient(90deg,#C8960C,#F5D060,#FFE680,#F5D060,#C8960C);}
+    50% {background:linear-gradient(90deg,#F5D060,#FFE680,#C8960C,#F5D060,#7A5500);}
+    75% {background:linear-gradient(90deg,#C8960C,#F5D060,#FFE680,#C8960C,#7A5500);}
+    100%{background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#FFE680,#C8960C);}
   }
   .scale-track-fill.gold-shine{
     animation:metallic-gold 0.8s ease-in-out forwards;
@@ -243,20 +233,20 @@
 
         <div style="margin-top:18px;">
           <div class="divider-label">다짐을 얼마나 실천했나요?</div>
-          <div class="scale-outer">
+          <div class="scale-outer" id="scaleOuter">
             <div class="scale-emoji-row">
               <div class="scale-emoji" id="emoji-0" onclick="setScale(0)">😔</div>
               <div class="scale-emoji" id="emoji-1" onclick="setScale(1)">😐</div>
               <div class="scale-emoji" id="emoji-2" onclick="setScale(2)">🙂</div>
               <div class="scale-emoji" id="emoji-3" onclick="setScale(3)">😄</div>
             </div>
-            <div class="scale-slider-wrap">
-              <input type="range" class="scale-slider" id="promiseScale" min="0" max="3" step="1" value="0"
-                oninput="setScale(parseInt(this.value))">
+            <div class="scale-touch-area" id="scaleTouchArea">
+              <div class="scale-track-wrap">
+                <div class="scale-track-fill" id="scaleTrackFill" style="width:0%;background:#D6EDE1;"></div>
+              </div>
+              <div class="scale-thumb" id="scaleThumb" style="left:-100px;"></div>
             </div>
-            <div class="scale-track-wrap">
-              <div class="scale-track-fill" id="scaleTrackFill" style="width:0%;background:var(--green-mid);"></div>
-            </div>
+            <input type="range" class="scale-slider" id="promiseScale" min="0" max="3" step="1" value="0">
             <div class="scale-text-row">
               <div class="scale-text" id="stext-0">못<br>지켰어요</div>
               <div class="scale-text" id="stext-1">조금<br>지켰어요</div>
@@ -452,42 +442,70 @@ const SCALE_COLORS=["#E24B4A","#EF9F27","#4CAF82","#C8960C"];
 const SCALE_BG=["#FCEBEB","#FAEEDA","#E8F7EF","#FBF0C0"];
 const SCALE_TEXT_COLORS=["#A32D2D","#633806","#2E8A5F","#7A5500"];
 
-function setScale(v){
-  v=parseInt(v);
-  state.promiseScale=v;
-  document.getElementById("promiseScale").value=v;
+function getEmojiCenters(){
+  const area=document.getElementById("scaleTouchArea");
+  const areaRect=area.getBoundingClientRect();
+  return [0,1,2,3].map(i=>{
+    const r=document.getElementById("emoji-"+i).getBoundingClientRect();
+    return (r.left+r.width/2)-areaRect.left;
+  });
+}
 
-  // 트랙범위 4%~96%(너비92%), 슬라이더위치 11%,37%,63%,89%
-  // 트랙 내 비율 = (슬라이더위치 - 4%) / 92% → 각 약 7.6%, 35.9%, 64.1%, 92.4% → 오른쪽끝+칸폭절반
-  const pct=[(20),(46),(72),(100)][v]+"%";
+function nearestStep(x){
+  const centers=getEmojiCenters();
+  let best=0,bestDist=Infinity;
+  centers.forEach((cx,i)=>{const d=Math.abs(x-cx);if(d<bestDist){bestDist=d;best=i;}});
+  return best;
+}
+
+function updateThumbAndFill(v){
+  const area=document.getElementById("scaleTouchArea");
+  const areaRect=area.getBoundingClientRect();
+  const centers=getEmojiCenters();
+  const cx=centers[v];
+  const pct=(cx/areaRect.width*100).toFixed(2)+"%";
+  document.getElementById("scaleThumb").style.left=pct;
   const fill=document.getElementById("scaleTrackFill");
   fill.classList.remove("gold-shine");
   void fill.offsetWidth;
   fill.style.width=pct;
   fill.style.background=SCALE_COLORS[v];
-  if(v===3){ fill.classList.add("gold-shine"); }
+  if(v===3) fill.classList.add("gold-shine");
+}
 
+function setScale(v){
+  v=parseInt(v);
+  state.promiseScale=v;
+  updateThumbAndFill(v);
   for(let i=0;i<4;i++){
     const em=document.getElementById("emoji-"+i);
     const st=document.getElementById("stext-"+i);
     em.classList.toggle("active",i===v);
     st.classList.toggle("active",i===v);
-    if(i===v) st.style.color=SCALE_COLORS[v];
-    else st.style.color="";
+    st.style.color=i===v?SCALE_COLORS[v]:"";
   }
-
-  // 번쩍 이펙트 (0=못지켰어요, 3=완벽하게)
   const em=document.getElementById("emoji-"+v);
   em.classList.remove("flash-red","flash-gold");
-  void em.offsetWidth; // reflow
+  void em.offsetWidth;
   if(v===0) em.classList.add("flash-red");
   if(v===3) em.classList.add("flash-gold");
-
   const lbl=document.getElementById("scaleSelectedLabel");
   lbl.textContent=SCALE_LABELS[v];
   lbl.style.background=SCALE_BG[v];
   lbl.style.color=SCALE_TEXT_COLORS[v];
   updateProgress();
+}
+
+function initScaleTouch(){
+  const area=document.getElementById("scaleTouchArea");
+  function handleX(clientX){
+    const rect=area.getBoundingClientRect();
+    setScale(nearestStep(clientX-rect.left));
+  }
+  area.addEventListener("mousedown",e=>{e.preventDefault();handleX(e.clientX);});
+  area.addEventListener("mousemove",e=>{if(e.buttons===1){e.preventDefault();handleX(e.clientX);}});
+  area.addEventListener("touchstart",e=>{e.preventDefault();handleX(e.touches[0].clientX);},{passive:false});
+  area.addEventListener("touchmove",e=>{e.preventDefault();handleX(e.touches[0].clientX);},{passive:false});
 }
 
 /* ── 진행률 ── */
@@ -588,6 +606,7 @@ updateOnlineStatus();
 
 document.getElementById("inputBirthday").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
 openDB().then(flushQueue);
+initScaleTouch();
 </script>
 </body>
 </html>

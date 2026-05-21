@@ -75,33 +75,58 @@
   .promise-input:focus{border-color:var(--green);background:white;}
   .promise-input::placeholder{color:var(--text-hint);}
 
-  /* 4점 척도 — 이모티콘과 슬라이더 정렬 */
-  .scale-outer{padding:0 12px;margin-top:16px;}
-  .scale-emoji-row{display:flex;justify-content:space-between;margin-bottom:4px;position:relative;}
-  .scale-emoji{font-size:24px;text-align:center;width:25%;cursor:pointer;transition:transform 0.2s,opacity 0.2s;opacity:0.3;user-select:none;-webkit-user-select:none;}
-  .scale-emoji.active{transform:scale(1.35);opacity:1;}
+  /* 4점 척도 */
+  .scale-outer{margin-top:16px;padding:0 4px;}
 
-  /* 슬라이더: thumb 중심이 track 양 끝에 오도록 padding으로 보정 */
-  .scale-slider-wrap{position:relative;padding:0 10px;}
+  /* 이모티콘 행 — 4등분 그리드 */
+  .scale-emoji-row{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:6px;}
+  .scale-emoji{font-size:26px;text-align:center;cursor:pointer;transition:transform 0.2s,opacity 0.2s;opacity:0.3;user-select:none;-webkit-user-select:none;padding:4px 0;}
+  .scale-emoji.active{transform:scale(1.4);opacity:1;}
+
+  .scale-slider-wrap{padding:0 11%;}
   input[type=range].scale-slider{
-    width:100%;height:6px;margin:4px 0 6px;
-    -webkit-appearance:none;appearance:none;
-    background:linear-gradient(to right,var(--green) 0%,var(--green) var(--fill,0%),var(--green-mid) var(--fill,0%),var(--green-mid) 100%);
-    border-radius:4px;outline:none;cursor:pointer;display:block;
+    width:100%;height:28px;display:block;margin:0;
+    -webkit-appearance:none;appearance:none;outline:none;cursor:pointer;
+    background:transparent;border-radius:4px;
   }
   input[type=range].scale-slider::-webkit-slider-thumb{
     -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
     background:white;border:2.5px solid var(--green);
-    box-shadow:0 2px 6px rgba(76,175,130,0.3);cursor:pointer;
+    box-shadow:0 2px 8px rgba(76,175,130,0.3);cursor:pointer;
+    position:relative;z-index:2;
   }
   input[type=range].scale-slider::-moz-range-thumb{
-    width:26px;height:26px;border-radius:50%;
-    background:white;border:2.5px solid var(--green);cursor:pointer;
+    width:26px;height:26px;border-radius:50%;border:2.5px solid var(--green);
+    background:white;cursor:pointer;
   }
-  .scale-text-row{display:flex;justify-content:space-between;padding:0 2px;}
-  .scale-text{font-size:10px;color:var(--text-hint);text-align:center;width:25%;line-height:1.4;transition:color 0.15s,font-weight 0.15s;}
-  .scale-text.active{color:var(--green-dark);font-weight:700;}
-  .scale-selected-label{text-align:center;font-size:13px;font-weight:500;color:var(--green-dark);background:var(--green-light);border-radius:20px;padding:5px 16px;margin-top:10px;}
+  .scale-track-wrap{position:relative;height:6px;margin:0 4%;border-radius:4px;background:#D6EDE1;margin-top:-17px;z-index:1;}
+  .scale-track-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;transition:width 0.25s,background 0.25s;}
+
+  /* 텍스트 행 */
+  .scale-text-row{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8px;}
+  .scale-text{font-size:10px;color:var(--text-hint);text-align:center;line-height:1.4;transition:color 0.15s,font-weight 0.15s;}
+  .scale-text.active{font-weight:700;}
+
+  .scale-selected-label{text-align:center;font-size:13px;font-weight:500;border-radius:20px;padding:5px 16px;margin-top:12px;transition:background 0.3s,color 0.3s;}
+
+  /* 번쩍 이펙트 */
+  @keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(226,75,74,0.6);}50%{box-shadow:0 0 0 14px rgba(226,75,74,0);}100%{box-shadow:0 0 0 0 rgba(226,75,74,0);}}
+  @keyframes flash-gold{0%{box-shadow:0 0 0 0 rgba(200,150,12,0.8);}50%{box-shadow:0 0 0 16px rgba(200,150,12,0);}100%{box-shadow:0 0 0 0 rgba(200,150,12,0);}}
+  .scale-emoji.flash-red{animation:flash-red 0.5s ease-out 2;}
+  .scale-emoji.flash-gold{animation:flash-gold 0.5s ease-out 2;}
+
+  /* 금색 메탈릭 그라데이션 트랙 이펙트 */
+  @keyframes metallic-gold{
+    0%  {background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#C8960C,#7A5500);background-size:300% 100%;background-position:0% 50%;}
+    25% {background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#C8960C,#7A5500);background-size:300% 100%;background-position:100% 50%;}
+    50% {background:linear-gradient(90deg,#F5D060,#C8960C,#7A5500,#C8960C,#F5D060);background-size:300% 100%;background-position:0% 50%;}
+    75% {background:linear-gradient(90deg,#C8960C,#F5D060,#C8960C,#7A5500,#C8960C);background-size:300% 100%;background-position:100% 50%;}
+    100%{background:linear-gradient(90deg,#7A5500,#C8960C,#F5D060,#FFE680,#C8960C);background-size:300% 100%;background-position:50% 50%;}
+  }
+  .scale-track-fill.gold-shine{
+    animation:metallic-gold 0.8s ease-in-out forwards;
+    box-shadow:0 0 8px rgba(245,208,96,0.8),0 0 16px rgba(200,150,12,0.4);
+  }
 
   .memo-input{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;resize:none;transition:border-color 0.2s;line-height:1.6;}
   .memo-input:focus{border-color:var(--green);background:white;}
@@ -229,6 +254,9 @@
               <input type="range" class="scale-slider" id="promiseScale" min="0" max="3" step="1" value="0"
                 oninput="setScale(parseInt(this.value))">
             </div>
+            <div class="scale-track-wrap">
+              <div class="scale-track-fill" id="scaleTrackFill" style="width:0%;background:var(--green-mid);"></div>
+            </div>
             <div class="scale-text-row">
               <div class="scale-text" id="stext-0">못<br>지켰어요</div>
               <div class="scale-text" id="stext-1">조금<br>지켰어요</div>
@@ -236,7 +264,7 @@
               <div class="scale-text" id="stext-3">완벽하게<br>지켰어요</div>
             </div>
           </div>
-          <div class="scale-selected-label" id="scaleSelectedLabel">← 슬라이더를 움직여 선택하세요</div>
+          <div class="scale-selected-label" id="scaleSelectedLabel">이모티콘을 눌러 선택하세요</div>
         </div>
       </div>
     </div>
@@ -360,7 +388,7 @@ function fillFormFromSaved(saved){
   state.phone=parseFloat(saved.phone)||0;             document.getElementById("phone-val").textContent=state.phone;
   document.getElementById("promiseInput").value=saved.promiseText==="-"?"":saved.promiseText;
   const scaleIdx=SCALE_SHORT.indexOf(saved.promiseScale);
-  if(scaleIdx>=0){ setScale(scaleIdx); document.getElementById("promiseScale").value=scaleIdx; }
+  if(scaleIdx>=0){ setScale(scaleIdx); }
   document.getElementById("memoInput").value=saved.memo==="-"?"":saved.memo;
   updateProgress();
 }
@@ -419,18 +447,46 @@ function adjustNum(field,delta){
   document.getElementById(field+"-val").textContent=state[field];
 }
 
-/* ── 척도 슬라이더 (이모티콘 클릭 + 슬라이더 공용) ── */
+/* ── 척도 ── */
+const SCALE_COLORS=["#E24B4A","#EF9F27","#4CAF82","#C8960C"];
+const SCALE_BG=["#FCEBEB","#FAEEDA","#E8F7EF","#FBF0C0"];
+const SCALE_TEXT_COLORS=["#A32D2D","#633806","#2E8A5F","#7A5500"];
+
 function setScale(v){
   v=parseInt(v);
   state.promiseScale=v;
   document.getElementById("promiseScale").value=v;
-  const pct=[0,33.33,66.66,100][v];
-  document.getElementById("promiseScale").style.setProperty("--fill",pct+"%");
+
+  // 트랙범위 4%~96%(너비92%), 슬라이더위치 11%,37%,63%,89%
+  // 트랙 내 비율 = (슬라이더위치 - 4%) / 92% → 각 약 7.6%, 35.9%, 64.1%, 92.4% → 오른쪽끝+칸폭절반
+  const pct=[(20),(46),(72),(100)][v]+"%";
+  const fill=document.getElementById("scaleTrackFill");
+  fill.classList.remove("gold-shine");
+  void fill.offsetWidth;
+  fill.style.width=pct;
+  fill.style.background=SCALE_COLORS[v];
+  if(v===3){ fill.classList.add("gold-shine"); }
+
   for(let i=0;i<4;i++){
-    document.getElementById("emoji-"+i).classList.toggle("active",i===v);
-    document.getElementById("stext-"+i).classList.toggle("active",i===v);
+    const em=document.getElementById("emoji-"+i);
+    const st=document.getElementById("stext-"+i);
+    em.classList.toggle("active",i===v);
+    st.classList.toggle("active",i===v);
+    if(i===v) st.style.color=SCALE_COLORS[v];
+    else st.style.color="";
   }
-  document.getElementById("scaleSelectedLabel").textContent=SCALE_LABELS[v];
+
+  // 번쩍 이펙트 (0=못지켰어요, 3=완벽하게)
+  const em=document.getElementById("emoji-"+v);
+  em.classList.remove("flash-red","flash-gold");
+  void em.offsetWidth; // reflow
+  if(v===0) em.classList.add("flash-red");
+  if(v===3) em.classList.add("flash-gold");
+
+  const lbl=document.getElementById("scaleSelectedLabel");
+  lbl.textContent=SCALE_LABELS[v];
+  lbl.style.background=SCALE_BG[v];
+  lbl.style.color=SCALE_TEXT_COLORS[v];
   updateProgress();
 }
 
@@ -494,6 +550,24 @@ async function doSubmit(){
   btn.disabled=false;
   txt.textContent="기록 제출하기";
   showScreen("successScreen");
+}
+
+function resetScaleUI(){
+  state.promiseScale=-1;
+  document.getElementById("promiseScale").value=0;
+  const fill=document.getElementById("scaleTrackFill");
+  fill.style.width="0%";
+  fill.style.background="var(--green-mid)";
+  for(let i=0;i<4;i++){
+    document.getElementById("emoji-"+i).classList.remove("active","flash-red","flash-gold");
+    const st=document.getElementById("stext-"+i);
+    st.classList.remove("active");
+    st.style.color="";
+  }
+  const lbl=document.getElementById("scaleSelectedLabel");
+  lbl.textContent="이모티콘을 눌러 선택하세요";
+  lbl.style.background="#E8F7EF";
+  lbl.style.color="#2E8A5F";
 }
 
 function showScreen(id){
